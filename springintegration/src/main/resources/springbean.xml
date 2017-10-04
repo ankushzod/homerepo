@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.0.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="com.springintegration.service" />
+
+	<int:channel id="msgChannel" />
+	<int:service-activator input-channel="msgChannel" ref="msgService" output-channel="newMsgChannel">
+	</int:service-activator>
+	
+	<int:channel id="newMsgChannel">
+	<int:queue capacity="100"/>
+	</int:channel>
+	<int:service-activator input-channel="newMsgChannel" ref="newMsgService">
+	<int:publish-subscribe-channel id="pubsub-channel"/>
+	</int:service-activator>
+
+</beans>
